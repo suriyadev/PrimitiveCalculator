@@ -1,0 +1,129 @@
+package com.suryadev.basicminicalculator;
+
+import android.content.ClipboardManager;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements  View.OnClickListener {
+
+
+        private TextView userInput;
+        private Button button0 , button1 , button2 , button3 , button4 , button5 , button6 ,
+                button7 , button8 , button9 , buttonSum , buttonSub , buttonDivision ,
+                buttonMul , buttonDelete , buttonEqual ,copyToClipboard,dot;
+
+        private List userInputBuffer;
+        private static  String DELETE = "DELETE";
+        private static  String EQUAL = "=";
+        private static  String COPY_TO_CLIPBOARD = "Copy to Clipboard";
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        userInput = findViewById(R.id.user_input);
+        userInput.setMovementMethod(new ScrollingMovementMethod());
+        userInputBuffer = new MyList();
+
+
+        copyToClipboard =  findViewById(R.id.cpy_to_clipboard);
+        copyToClipboard.setOnClickListener(this);
+
+        dot =  findViewById(R.id.dot);
+        dot.setOnClickListener(this);
+        button0 =  findViewById(R.id.num_zero);
+        button0.setOnClickListener(this);
+        button1 =  findViewById(R.id.num_one);
+        button1.setOnClickListener(this);
+        button2 =  findViewById(R.id.num_two);
+        button2.setOnClickListener(this);
+        button3 =  findViewById(R.id.num_three);
+        button3.setOnClickListener(this);
+        button4 =  findViewById(R.id.num_four);
+        button4.setOnClickListener(this);
+        button5 =  findViewById(R.id.num_five);
+        button5.setOnClickListener(this);
+        button6 =  findViewById(R.id.num_six);
+        button6.setOnClickListener(this);
+        button7 =  findViewById(R.id.num_seven);
+        button7.setOnClickListener(this);
+        button8 =  findViewById(R.id.num_eight);
+        button8.setOnClickListener(this);
+        button9 =  findViewById(R.id.num_nine);
+        button9.setOnClickListener(this);
+        buttonSum =  findViewById(R.id.sum);
+        buttonSum.setOnClickListener(this);
+        buttonSub =  findViewById(R.id.sub);
+        buttonSub.setOnClickListener(this);
+        buttonMul =  findViewById(R.id.multiply);
+        buttonMul.setOnClickListener(this);
+        buttonDivision =  findViewById(R.id.div);
+        buttonDivision.setOnClickListener(this);
+        buttonDelete =  findViewById(R.id.delete);
+        buttonDelete.setOnClickListener(this);
+        buttonEqual =  findViewById(R.id.equal);
+        buttonEqual.setOnClickListener(this);
+
+
+
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        Button userClickedButton = findViewById(v.getId());
+        String userAction = userClickedButton.getText().toString();
+
+
+        if(userAction.equals(EQUAL)){
+
+            userInput.setText(String.valueOf(
+                    BasicCalculator.calculate(userInputBuffer.toString())));
+            return;
+        }
+
+
+        if(userAction.equals(COPY_TO_CLIPBOARD)){
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+            clipboard.setText(userInput.getText());
+          Toast.makeText(getApplicationContext(),"Results Copied to Clipboard.",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+
+        if(userAction.equals(DELETE) == false) {
+            /** append to user input to  display **/
+            userInputBuffer.add(userAction);
+            userInput.setText(userInputBuffer.toString());
+        }else {
+
+            if(userInputBuffer.isEmpty() == false) {
+                userInputBuffer.remove(userInputBuffer.size() - 1);
+                userInput.setText(userInputBuffer.toString());
+            }
+        }
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+}
