@@ -86,7 +86,12 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         String userAction = userClickedButton.getText().toString();
 
 
-         if(userInputBuffer.isEmpty() == true &&
+        if(userAction.equals(EQUAL) && userInputBuffer.isEmpty() == true) {
+          return;
+        }
+
+
+            if(userInputBuffer.isEmpty() == true &&
                  BasicCalculator.isOperator(userAction) == true){
              return;
          }else if( (userInputBuffer.isEmpty() == false) && BasicCalculator.isOperator((String)userInputBuffer.get(userInputBuffer.size()-1)) == true &&
