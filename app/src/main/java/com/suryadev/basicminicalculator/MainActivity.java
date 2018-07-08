@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         String userAction = userClickedButton.getText().toString();
 
         // Reset the textview color
-        userInput.setTextColor(Color.BLACK);
+        userInput.setTextColor(Color.parseColor("#747577"));
 
         if(userAction.equals(EQUAL) && userInputBuffer.isEmpty() == true) {
           return;
@@ -108,6 +108,14 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
             if(userInputBuffer.isEmpty() == true &&
                  BasicCalculator.isOperator(userAction) == true){
+
+                /**  Special Case for (-) Hold The Previous result value **/
+                    if(userAction.equals("-")) {
+                               userInputBuffer.add("-");
+                                userInput.setText(userInputBuffer.toString());
+                    }
+                /**  Special Case for (-) Hold The Previous result value **/
+
              return;
          }else if( (userInputBuffer.isEmpty() == false) && BasicCalculator.isOperator((String)userInputBuffer.get(userInputBuffer.size()-1)) == true &&
                 BasicCalculator.isOperator(userAction) == true ){
@@ -127,6 +135,15 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             try {
                  userInput.setText(String.valueOf(
                         BasicCalculator.calculate(userInputBuffer.toString())));
+                 userInput.setTextColor(Color.BLACK);
+
+                     /** Hold The Previous result value **/
+
+                             userInputBuffer.clear();
+                             userInputBuffer.add(userInput.getText().toString());
+
+                     /** Hold The Previous result value **/
+
             }catch(InvalidExpression e ){
                  userInput.setText(e.getMessage());
                  userInput.setTextColor(Color.parseColor("#f44646"));
@@ -161,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             if(userInputBuffer.isEmpty() == false) {
                 userInputBuffer.remove(userInputBuffer.size() - 1);
                 userInput.setText(userInputBuffer.toString());
+                userInput.setTextColor(Color.parseColor("#747577"));
             }
         }
 
