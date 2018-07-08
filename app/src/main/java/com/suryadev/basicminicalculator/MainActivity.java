@@ -1,6 +1,8 @@
 package com.suryadev.basicminicalculator;
 
 import android.content.ClipboardManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -12,7 +14,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements  View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements  View.OnClickListener , View.OnLongClickListener {
 
 
         private TextView userInput;
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         buttonDivision.setOnClickListener(this);
         buttonDelete =  findViewById(R.id.delete);
         buttonDelete.setOnClickListener(this);
+        buttonDelete.setOnLongClickListener(this);
         buttonEqual =  findViewById(R.id.equal);
         buttonEqual.setOnClickListener(this);
 
@@ -79,12 +82,24 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
     }
 
+    @Override
+    public boolean onLongClick(View v) {
+        Button userClickedButton = findViewById(v.getId());
+        String userAction = userClickedButton.getText().toString();
+        if(userAction.equals(DELETE) == true ) {
+               userInput.setText("");
+               userInputBuffer.clear();
+        }
+         return true;
+    }
 
     @Override
     public void onClick(View v) {
         Button userClickedButton = findViewById(v.getId());
         String userAction = userClickedButton.getText().toString();
 
+        // Reset the textview color
+        userInput.setTextColor(Color.BLACK);
 
         if(userAction.equals(EQUAL) && userInputBuffer.isEmpty() == true) {
           return;
@@ -110,10 +125,11 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
 
             try {
-                userInput.setText(String.valueOf(
+                 userInput.setText(String.valueOf(
                         BasicCalculator.calculate(userInputBuffer.toString())));
             }catch(InvalidExpression e ){
                  userInput.setText(e.getMessage());
+                 userInput.setTextColor(Color.parseColor("#f44646"));
             }
             userInputBuffer.add(temp);
             return;
