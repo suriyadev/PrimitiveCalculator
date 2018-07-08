@@ -112,6 +112,10 @@ public class BasicCalculator {
 		}
 	}
 
+	public static boolean isOperator(String str) {
+       return operators.contains(str);
+	}
+
 	private static boolean isNumber(String str) {
 		try {
 			Integer.parseInt(str);
@@ -127,79 +131,84 @@ public class BasicCalculator {
 		}
 	}
 
-	public static Double calculate(String expression) {
+	public static Double calculate(String expression) throws InvalidExpression {
+		try {
+			Stack<String> left = new Stack<String>();
+			Stack<Double> right = new Stack<Double>();
+			List<String> expList = parseExpression(expression);
 
-		Stack<String> left = new Stack<String>();
-		Stack<Double> right = new Stack<Double>();
-		List<String> expList = parseExpression(expression);
+			for (int i = 0; i < expList.size(); i++) {
 
-		for (int i = 0; i < expList.size(); i++) {
+				String value = expList.get(i);
 
-			String value = expList.get(i);
+				if (isNumber(value)) {
+					right.push(Double.valueOf(value));
 
-			if (isNumber(value)) {
-				right.push(Double.valueOf(value));
+				} else if (operators.contains(value)) {
 
-			} else if (operators.contains(value)) {
+					if (right.size() > 1) {
 
-				if (right.size() > 1) {
+						String tempOpValue = left.peek();
 
-					String tempOpValue = left.peek();
+						if (compareOp(value, tempOpValue) == 1 || compareOp(value, tempOpValue) == 0) {
+							/**
+							 * If greater than existing operator no problem
+							 */
+							left.push(value);
 
-					if (compareOp(value, tempOpValue) == 1 || compareOp(value, tempOpValue) == 0) {
-						/**
-						 * If greater than existing operator no problem
-						 */
-						left.push(value);
+						} else if (compareOp(value, tempOpValue) == -1) {
+							/**
+							 * if lesser than existing operator perform those operators first
+							 */
 
-					} else if (compareOp(value, tempOpValue) == -1) {
-						/**
-						 * if lesser than existing operator perform those operators first
-						 */
+							int leftBukketSize = left.size();
 
-						int leftBukketSize = left.size();
+							for (int j = 0; j < leftBukketSize; j++) {
 
-						for (int j = 0; j < leftBukketSize; j++) {
+								String tempOpValue2 = left.peek();
 
-							String tempOpValue2 = left.peek();
+								if (compareOp(value, tempOpValue2) == -1) {
+									right.push(
+											compute(left.pop(), Double.valueOf(right.pop()), Double.valueOf(right.pop())));
 
-							if (compareOp(value, tempOpValue2) == -1) {
-								right.push(
-										compute(left.pop(), Double.valueOf(right.pop()), Double.valueOf(right.pop())));
+								} else {
+									left.push(value);
+								}
 
-							} else {
-								left.push(value);
 							}
 
+							if (left.isEmpty()) {
+								left.push(value);
+							}
 						}
 
-						if (left.isEmpty()) {
-							left.push(value);
-						}
+					} else {
+						left.push(value);
 					}
 
-				} else {
-					left.push(value);
+				}
+
+				/**
+				 * Check if it is last element
+				 */
+				if (i == expList.size() - 1) {
+
+					int leftBucketSize = left.size();
+
+					for (int j = 0; j < leftBucketSize; j++) {
+
+						right.push(compute(left.pop(), Double.valueOf(right.pop()), Double.valueOf(right.pop())));
+					}
 				}
 
 			}
 
-			/**
-			 * Check if it is last element
-			 */
-			if (i == expList.size() - 1) {
+			return right.pop();
 
-				int leftBucketSize = left.size();
-
-				for (int j = 0; j < leftBucketSize; j++) {
-
-					right.push(compute(left.pop(), Double.valueOf(right.pop()), Double.valueOf(right.pop())));
-				}
-			}
-
+		}catch(Exception e){
+			throw new InvalidExpression();
 		}
 
-		return right.pop();
 	}
 
 }

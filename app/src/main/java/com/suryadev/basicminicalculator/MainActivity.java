@@ -86,15 +86,36 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         String userAction = userClickedButton.getText().toString();
 
 
-        if(userAction.equals(EQUAL)){
+         if(userInputBuffer.isEmpty() == true &&
+                 BasicCalculator.isOperator(userAction) == true){
+             return;
+         }else if( (userInputBuffer.isEmpty() == false) && BasicCalculator.isOperator((String)userInputBuffer.get(userInputBuffer.size()-1)) == true &&
+                BasicCalculator.isOperator(userAction) == true ){
+            return;
+        }
 
-            userInput.setText(String.valueOf(
-                    BasicCalculator.calculate(userInputBuffer.toString())));
+        if(userAction.equals(EQUAL) && (userInputBuffer.isEmpty() == false)){
+
+             String temp = "";
+
+             if(BasicCalculator.isOperator((String)userInputBuffer.get(userInputBuffer.size()-1)) == true ){
+                 temp = (String)userInputBuffer.get(userInputBuffer.size()-1);
+                 userInputBuffer.remove(userInputBuffer.size()-1);
+            }
+
+
+            try {
+                userInput.setText(String.valueOf(
+                        BasicCalculator.calculate(userInputBuffer.toString())));
+            }catch(InvalidExpression e ){
+                 userInput.setText(e.getMessage());
+            }
+            userInputBuffer.add(temp);
             return;
         }
 
 
-        if(userAction.equals(COPY_TO_CLIPBOARD)){
+        if(userAction.equals(COPY_TO_CLIPBOARD) && (userInputBuffer.isEmpty() == false)){
             ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             clipboard.setText(userInput.getText());
           Toast.makeText(getApplicationContext(),"Results Copied to Clipboard.",Toast.LENGTH_LONG).show();
@@ -102,11 +123,19 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         }
 
 
-        if(userAction.equals(DELETE) == false) {
+        if(userAction.equals(DELETE) == false ) {
             /** append to user input to  display **/
+
+            if(userAction.equals(COPY_TO_CLIPBOARD)){
+                Toast.makeText(getApplicationContext(),"Nothing to Copy!",Toast.LENGTH_LONG).show();
+                return;
+            }
+
             userInputBuffer.add(userAction);
             userInput.setText(userInputBuffer.toString());
-        }else {
+
+
+         }else if(userAction.equals(DELETE) == true ){
 
             if(userInputBuffer.isEmpty() == false) {
                 userInputBuffer.remove(userInputBuffer.size() - 1);
