@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         private List userInputBuffer;
         private static  String DELETE = "DELETE";
         private static  String EQUAL = "=";
-        private static  String COPY_TO_CLIPBOARD = "Copy to Clipboard";
+        private static  String COPY_TO_CLIPBOARD = "Copy";
 
 
 
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             /** append to user input to  display **/
 
             if(userAction.equals(COPY_TO_CLIPBOARD)){
-                Toast.makeText(getApplicationContext(),"Nothing to Copy!",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Nothing to Copy!",Toast.LENGTH_SHORT).show();
                 return;
             }
 
