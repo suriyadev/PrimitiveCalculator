@@ -14,10 +14,10 @@
 
     <Button
         android:id="@+id/cpy_to_clipboard"
-        android:layout_width="177dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#abff4444"
-        android:text="Copy to Clipboard"
+        android:text="Copy"
         android:textColor="@android:color/white"
         android:textStyle="bold" />
 
