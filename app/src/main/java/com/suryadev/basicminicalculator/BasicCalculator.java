@@ -77,13 +77,19 @@ public class BasicCalculator {
 		for (int i = 0; i < values.length; i++) {
 
 			if (operators.contains(String.valueOf(values[i]))) {
+              /**  Special Case for (-) Hold The Previous result value **/
+				if(i == 0){
+					noBuffer += values[i];
+				}else {
+					/** Special Case for (-) Hold The Previous result value **/
 
-				/**
-				 * Flush the noBuffer to odList
-				 */
-				orList.add(noBuffer);
-				orList.add(String.valueOf(values[i]));
-				noBuffer = "";
+					/**
+					 * Flush the noBuffer to odList
+					 */
+					orList.add(noBuffer);
+					orList.add(String.valueOf(values[i]));
+					noBuffer = "";
+				}
 			} else {
 
 				noBuffer += values[i];
