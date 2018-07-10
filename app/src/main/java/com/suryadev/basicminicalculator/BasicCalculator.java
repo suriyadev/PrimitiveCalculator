@@ -6,6 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+
+/**
+ *
+ * Custom Calculator Logic
+ *
+ * Suriya
+ *
+ */
 public class BasicCalculator {
 
 	private static List<String> operators;
