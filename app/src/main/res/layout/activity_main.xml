@@ -93,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
                 android:background="@android:color/white"
-                android:text="x" />
+                android:text="*" />
         </TableRow>
 
         <TableRow

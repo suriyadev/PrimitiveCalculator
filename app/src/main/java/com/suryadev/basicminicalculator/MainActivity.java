@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,28 +129,51 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
              String temp = "";
 
+
+             /** Avoid Tailing Operators **/
              if(BasicCalculator.isOperator((String)userInputBuffer.get(userInputBuffer.size()-1)) == true ){
                  temp = (String)userInputBuffer.get(userInputBuffer.size()-1);
                  userInputBuffer.remove(userInputBuffer.size()-1);
             }
 
-
+           /**  // CUSTOM ALGORITHM TO EVALUATE EXPRESSION
             try {
                  userInput.setText(String.valueOf(
                         BasicCalculator.calculate(userInputBuffer.toString())));
                  userInput.setTextColor(Color.BLACK);
-
-                     /** Hold The Previous result value **/
-
                              userInputBuffer.clear();
                              userInputBuffer.add(userInput.getText().toString());
 
-                     /** Hold The Previous result value **/
 
             }catch(InvalidExpression e ){
                  userInput.setText(e.getMessage());
                  userInput.setTextColor(Color.parseColor("#f44646"));
             }
+         **/
+
+            /** USING EXP4J LIB TO EVALUATE COMPUTATION **/
+
+                     try {
+
+                         Expression expression = new ExpressionBuilder(userInputBuffer.toString()).build();
+
+                         // Calculate the result and display
+                        double result = expression.evaluate();
+                        userInput.setText(Double.toString(result));
+
+                        userInputBuffer.clear();
+                        userInput.setTextColor(Color.BLACK);
+                        userInputBuffer.add(userInput.getText().toString());
+
+                    } catch (Exception ex) {
+                        // Display an error message
+                        userInput.setText("Invalid Expression");
+                        userInput.setTextColor(Color.parseColor("#f44646"));
+                    }
+
+
+            /** USING EXP4J LIB TO EVALUATE COMPUTATION  **/
+
             userInputBuffer.add(temp);
             return;
         }
@@ -169,6 +195,8 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                 return;
             }
 
+
+             /** Appending the values to expression buffer from the user screen **/
             userInputBuffer.add(userAction);
             userInput.setText(userInputBuffer.toString());
 

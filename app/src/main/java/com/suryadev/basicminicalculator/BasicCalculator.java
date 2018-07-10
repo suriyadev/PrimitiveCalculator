@@ -9,7 +9,7 @@ import java.util.Stack;
 
 /**
  *
- * Custom Calculator Logic
+ * Custom Calculator Logic Algorithm
  *
  * Suriya
  *
@@ -34,14 +34,14 @@ public class BasicCalculator {
 		opValues = new HashMap<String, Integer>();
 		opValues.put("+", 2);
 		opValues.put("-", 1);
-		opValues.put("x", 3);
+		opValues.put("*", 3);
 		opValues.put("/", 4);
 		opValues.put("%", 4);
 
 		operators = new ArrayList<String>();
 		operators.add("+");
 		operators.add("-");
-		operators.add("x");
+		operators.add("*");
 		operators.add("/");
 		operators.add("%");
 
@@ -62,7 +62,7 @@ public class BasicCalculator {
 		case "/":
 			result = valueB / valueA;
 			break;
-		case "x":
+		case "*":
 			result = valueB * valueA;
 			break;
 		case "%":
