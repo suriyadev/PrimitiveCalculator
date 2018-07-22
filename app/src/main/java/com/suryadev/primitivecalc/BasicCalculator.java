@@ -1,4 +1,4 @@
-package com.suryadev.basicminicalculator;
+package com.suryadev.primitivecalc;
 
 import java.util.ArrayList;
 import java.util.HashMap;

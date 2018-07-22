@@ -4,21 +4,28 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/user_input"
+    <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:maxLines="500"
-        android:scrollbars = "horizontal"
-        android:textSize="50dp" />
+        android:layout_height="130dp">
+
+        <TextView
+            android:id="@+id/user_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="500"
+            android:scrollHorizontally="true"
+            android:textSize="50dp" />
+    </HorizontalScrollView>
+
 
     <Button
         android:id="@+id/cpy_to_clipboard"
-        android:layout_width="wrap_content"
+        style="@style/Widget.AppCompat.Button.Small"
+        android:layout_width="53dp"
         android:layout_height="wrap_content"
-        android:background="#abff4444"
+        android:background="?android:attr/actionModeCopyDrawable"
         android:text="Copy"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/transparent"
         android:textStyle="bold" />
 
     <TableLayout

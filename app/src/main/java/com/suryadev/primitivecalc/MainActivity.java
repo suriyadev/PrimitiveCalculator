@@ -1,11 +1,11 @@
-package com.suryadev.basicminicalculator;
+package com.suryadev.primitivecalc;
 
 import android.content.ClipboardManager;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,7 +14,6 @@ import android.widget.Toast;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements  View.OnClickListener , View.OnLongClickListener {
@@ -95,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         }
          return true;
     }
+
+
 
     @Override
     public void onClick(View v) {
@@ -179,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         }
 
 
-        if(userAction.equals(COPY_TO_CLIPBOARD) && (userInputBuffer.isEmpty() == false)){
+        if( userAction.equals(COPY_TO_CLIPBOARD) && (userInputBuffer.isEmpty() == false)){
             ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             clipboard.setText(userInput.getText());
           Toast.makeText(getApplicationContext(),"Results Copied to Clipboard.",Toast.LENGTH_LONG).show();

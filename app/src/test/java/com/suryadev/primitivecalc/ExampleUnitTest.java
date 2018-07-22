@@ -1,4 +1,4 @@
-package com.suryadev.basicminicalculator;
+package com.suryadev.primitivecalc;
 
 import org.junit.Test;
 
