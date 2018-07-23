@@ -1,11 +1,15 @@
 package com.suryadev.primitivecalc;
 
+import android.content.ActivityNotFoundException;
 import android.content.ClipboardManager;
+import android.content.Intent;
 import android.graphics.Color;
+import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,7 +18,9 @@ import android.widget.Toast;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements  View.OnClickListener , View.OnLongClickListener {
 
@@ -28,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         private static  String DELETE = "DELETE";
         private static  String EQUAL = "=";
         private static  String COPY_TO_CLIPBOARD = "Copy";
-
+        private final int REQ_CODE_SPEECH_INPUT = 100;
 
 
     @Override
@@ -81,8 +87,79 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         buttonEqual.setOnClickListener(this);
 
 
+        ((Button)findViewById(R.id.speak)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                promptSpeechInput();
+            }
+        });
+
 
     }
+
+
+    /**
+     * Showing google speech input dialog
+     * */
+    private void promptSpeechInput() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+       // intent.putExtra(RecognizerIntent.EXTRA_PROMPT, );
+        try {
+            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
+        } catch (ActivityNotFoundException a) {
+            Toast.makeText(getApplicationContext(),"Speech not Supported",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Receiving speech input
+     * */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case REQ_CODE_SPEECH_INPUT: {
+                if (resultCode == RESULT_OK && null != data) {
+
+                    ArrayList<String> result = data
+                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+                    try{
+
+                        String resultValue = result.get(0);
+
+                        Expression expression = new ExpressionBuilder(resultValue).build();
+
+                        // Calculate the result and display
+                        double expResult = expression.evaluate();
+                        userInputBuffer.add(String.valueOf(expResult));
+                        userInput.setText(String.valueOf(new Double(expResult).longValue()));
+                        
+
+                    }catch(Exception e) {
+                        Snackbar snackbar = Snackbar
+                                .make(findViewById(R.id.calc_layout), "Can't get that numbers try again", Snackbar.LENGTH_INDEFINITE);
+                        snackbar.setAction("RETRY", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                promptSpeechInput();
+                            }
+                        });
+                        snackbar.show();
+                    }
+
+                }
+                break;
+            }
+
+        }
+    }
+
 
     @Override
     public boolean onLongClick(View v) {
@@ -152,15 +229,16 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             }
          **/
 
-            /** USING EXP4J LIB TO EVALUATE COMPUTATION **/
+            /** USING EXP4J LIB TO EVALUATE EXPRESSION **/
 
                      try {
 
-                         Expression expression = new ExpressionBuilder(userInputBuffer.toString()).build();
+                        Expression expression = new ExpressionBuilder(userInputBuffer.toString()).build();
 
                          // Calculate the result and display
                         double result = expression.evaluate();
-                        userInput.setText(Double.toString(result));
+
+                        userInput.setText(String.valueOf(new Double(result).longValue()));
 
                         userInputBuffer.clear();
                         userInput.setTextColor(Color.BLACK);
