@@ -139,11 +139,12 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                         double expResult = expression.evaluate();
                         userInputBuffer.add(String.valueOf(expResult));
                         userInput.setText(String.valueOf(new Double(expResult).longValue()));
-                        
+
 
                     }catch(Exception e) {
                         Snackbar snackbar = Snackbar
-                                .make(findViewById(R.id.calc_layout), "Can't get that numbers try again", Snackbar.LENGTH_INDEFINITE);
+                                .make(findViewById(R.id.calc_layout), "Can't get that numbers try again",
+                                        Snackbar.LENGTH_LONG);
                         snackbar.setAction("RETRY", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
