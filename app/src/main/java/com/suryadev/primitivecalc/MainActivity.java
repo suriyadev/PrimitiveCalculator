@@ -137,9 +137,15 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
                         // Calculate the result and display
                         double expResult = expression.evaluate();
-                        userInputBuffer.add(String.valueOf(expResult));
-                        userInput.setText(String.valueOf(new Double(expResult).longValue()));
+                        long value = (long)expResult;
 
+                        if(Math.abs(expResult-value) > 0) {
+                            userInput.setText(String.valueOf(expResult));
+                            userInputBuffer.add(String.valueOf(expResult));
+                        }else {
+                            userInput.setText(String.valueOf(value));
+                            userInputBuffer.add(String.valueOf(value));
+                        }
 
                     }catch(Exception e) {
                         Snackbar snackbar = Snackbar
@@ -237,11 +243,16 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                         Expression expression = new ExpressionBuilder(userInputBuffer.toString()).build();
 
                          // Calculate the result and display
-                        double result = expression.evaluate();
+                         double result = expression.evaluate();
 
-                        userInput.setText(String.valueOf(new Double(result).longValue()));
+                         long value = (long)result;
 
-                        userInputBuffer.clear();
+                         if(Math.abs(result-value) > 0)
+                             userInput.setText(String.valueOf(result));
+                         else
+                             userInput.setText(String.valueOf(value));
+
+                         userInputBuffer.clear();
                         userInput.setTextColor(Color.BLACK);
                         userInputBuffer.add(userInput.getText().toString());
 
